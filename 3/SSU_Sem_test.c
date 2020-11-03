@@ -48,6 +48,9 @@ int main(int argc, char *argv[])
   
   pthread_join(t1, NULL);
   pthread_join(t2, NULL);
-  
+ 
+	SSU_Sem_free(&child, 0);
+	SSU_Sem_free(&parent, 0);
+
   return 0;
 }
