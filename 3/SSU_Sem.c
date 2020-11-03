@@ -33,7 +33,9 @@ void SSU_Sem_down(SSU_Sem *s) {
 
 void SSU_Sem_up(SSU_Sem *s) {
 	s->value++;
-	pthread_kill(s->thread_list[s->last], SIGUSR1);
+	if (s->thread_list[s->last] != 0) {
+		pthread_kill(s->thread_list[s->last], SIGUSR1);
+	}
 	s->thread_list[s->last] = 0; // pop 
 	s->last--;
 }

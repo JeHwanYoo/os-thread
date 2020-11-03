@@ -21,21 +21,26 @@ void *justprint(void *data)
 {
 	int thread_id = *((int *)data);
 
+	SSU_Sem_down(&sem[thread_id]);
+
 	for(int i = 0; i < NUM_ITER; i++)
 	{
-		count--;
-		SSU_Sem_down(&sem[thread_id]);
 		printf("This is thread %d\n", thread_id);
 		if (thread_id + 1 != NUM_THREADS) {
 			SSU_Sem_up(&sem[thread_id + 1]);
+		} else {
+			SSU_Sem_up(&sem[0]);
+		}
+		if (i != NUM_ITER - 1) {
+			SSU_Sem_down(&sem[thread_id]);
 		}
 	}
+
 	return 0;
 }
 
 int main(int argc, char *argv[])
 {
-
 	pthread_t mythreads[NUM_THREADS];
 	int mythread_id[NUM_THREADS];
 	int i, j;
@@ -49,22 +54,8 @@ int main(int argc, char *argv[])
 		mythread_id[i] = i;
 		pthread_create(&mythreads[i], NULL, justprint, (void *)&mythread_id[i]);
 	}
-
-	i = 0;
-	while (1) {
-		usleep(1000);
-		if (i != NUM_ITER && count == 0) 
-		{
-			count = NUM_THREADS;
-			i++;
-			SSU_Sem_up(&sem[0]);
-		}
-		else if (i == NUM_ITER)
-		{
-			break;
-		}
-	}
-
+	usleep(1000);
+	SSU_Sem_up(&sem[0]);
 	for(i = 0; i < NUM_THREADS; i++)
 	{
 		pthread_join(mythreads[i], NULL);
