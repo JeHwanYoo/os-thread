@@ -19,25 +19,23 @@ void SSU_Sem_init(SSU_Sem *s, int value) {
 void SSU_Sem_down(SSU_Sem *s) {
 	s->value--;
 	int i;
-	pthread_t found;
-
+	struct sigaction sig_act;
+	sigset_t sig_set;
 	if (s->value < 0) {
 		s->thread_list[++s->last] = pthread_self();
-		struct sigaction sig_act;
-		sigset_t sig_set;
-
+		
 		sigemptyset(&sig_act.sa_mask);
 		sig_act.sa_flags = 0;
 		sig_act.sa_handler = signal_handler;
-		sigaction(SIGCONT, &sig_act, NULL);
+		sigaction(SIGUSR1, &sig_act, NULL);
 		sigsuspend(&sig_act.sa_mask);
-	}	
+	}
 }
 
 void SSU_Sem_up(SSU_Sem *s) {
 	s->value++;
 	if (s->thread_list[s->last] != NULL) {
-		int i = pthread_kill(s->thread_list[s->last], SIGCONT);
+		pthread_kill(s->thread_list[s->last], SIGUSR1);
 		s->thread_list[s->last] = 0; // pop 
 		s->last--;
 	}
