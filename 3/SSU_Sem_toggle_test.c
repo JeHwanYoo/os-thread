@@ -54,8 +54,10 @@ int main(int argc, char *argv[])
 		mythread_id[i] = i;
 		pthread_create(&mythreads[i], NULL, justprint, (void *)&mythread_id[i]);
 	}
+
 	usleep(1000);
 	SSU_Sem_up(&sem[0]);
+
 	for(i = 0; i < NUM_THREADS; i++)
 	{
 		pthread_join(mythreads[i], NULL);
