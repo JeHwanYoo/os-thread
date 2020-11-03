@@ -23,7 +23,6 @@ void SSU_Sem_down(SSU_Sem *s) {
 	sigset_t sig_set;
 	if (s->value < 0) {
 		s->thread_list[++s->last] = pthread_self();
-		
 		sigemptyset(&sig_act.sa_mask);
 		sig_act.sa_flags = 0;
 		sig_act.sa_handler = signal_handler;
@@ -34,10 +33,8 @@ void SSU_Sem_down(SSU_Sem *s) {
 
 void SSU_Sem_up(SSU_Sem *s) {
 	s->value++;
-	if (s->thread_list[s->last] != NULL) {
-		pthread_kill(s->thread_list[s->last], SIGUSR1);
-		s->thread_list[s->last] = 0; // pop 
-		s->last--;
-	}
+	pthread_kill(s->thread_list[s->last], SIGUSR1);
+	s->thread_list[s->last] = 0; // pop 
+	s->last--;
 }
 
