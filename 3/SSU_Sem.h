@@ -10,8 +10,6 @@ typedef struct thread_node {
 typedef struct SSU_Sem {
 	int value;
 	int length;
-	// int last;
-	// pthread_t thread_list[MAX_THREAD_LIST];
 	T_NODE *thread_list;
 	T_NODE *first;
 } SSU_Sem;
