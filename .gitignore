@@ -5,3 +5,5 @@ test-master_worker.sh
 *.swp
 SSU_Sem_test
 SSU_Sem_toggle_test
+rw_lock-r-test
+rw_lock-w-test
