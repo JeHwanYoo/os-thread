@@ -22,7 +22,7 @@ void *Reader(void* arg)
 	indx++;
 	pthread_spin_unlock(&spinlock);
 
-	// printf("Reader: %d has acquired the lock\n", threadNUmber);
+	printf("Reader: %d has acquired the lock\n", threadNUmber);
 	usleep(10000);
 
 	pthread_spin_lock(&spinlock);
@@ -32,7 +32,7 @@ void *Reader(void* arg)
 
 	// Releasing the Lock
 	r_unlock(&rwlock);
-	// printf("Reader: %d has released the lock\n",threadNUmber);
+	printf("Reader: %d has released the lock\n",threadNUmber);
 }
 
 void *Writer(void* arg)
@@ -47,7 +47,7 @@ void *Writer(void* arg)
 	indx++;
 	pthread_spin_unlock(&spinlock);
 
-	// printf("Writer: %d has acquired the lock\n",threadNUmber);
+	printf("Writer: %d has acquired the lock\n",threadNUmber);
   usleep(10000);
 
 	pthread_spin_lock(&spinlock);
@@ -57,7 +57,7 @@ void *Writer(void* arg)
 
 	// Releasing the Lock
 	w_unlock(&rwlock);
-	// printf("Writer: %d has released the lock\n",threadNUmber);
+	printf("Writer: %d has released the lock\n",threadNUmber);
 }
 
 int main(int argc, char *argv[])

@@ -2,25 +2,33 @@
 
 void init_rwlock(struct rw_lock * rw)
 {
-  //	Write the code for initializing your read-write lock.
+	rw = malloc(sizeof(struct rw_lock));
+	rw->lock = 0;
+	rw->read_length = 0;
 }
 
 void r_lock(struct rw_lock * rw)
 {
-  //	Write the code for aquiring read-write lock by the reader.
+	while (rw->lock == -1) {}
+	rw->lock = 1;
+	rw->read_length++;
 }
 
 void r_unlock(struct rw_lock * rw)
 {
-  //	Write the code for releasing read-write lock by the reader.
+	rw->read_length--;
+	if (rw->read_length == 0) {
+		rw->lock = 0;
+	}
 }
 
 void w_lock(struct rw_lock * rw)
 {
-  //	Write the code for aquiring read-write lock by the writer.
+	while (rw->lock != 0) {}
+	rw->lock = -1;
 }
 
 void w_unlock(struct rw_lock * rw)
 {
-  //	Write the code for releasing read-write lock by the writer.
+	rw->lock = 0;
 }
